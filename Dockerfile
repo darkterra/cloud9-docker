@@ -12,7 +12,7 @@ RUN apt-get install -y build-essential g++ curl libssl-dev apache2-utils git lib
     
 # ------------------------------------------------------------------------------
 # Install Cloud9
-RUN git clone https://github.com/c9/core.git /cloud9
+RUN sudo git clone https://github.com/c9/core.git /cloud9
 WORKDIR /cloud9
 RUN scripts/install-sdk.sh
 
