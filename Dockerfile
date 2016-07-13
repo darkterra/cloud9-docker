@@ -8,7 +8,7 @@ MAINTAINER Jérémy Young <darkterra01@gmail.com>
 # ------------------------------------------------------------------------------
 # Install base
 RUN sudo apt-get update
-RUN sudo apt-get install -y build-essential g++ curl libssl-dev apache2-utils git libxml2-dev sshfs ca-certificates
+RUN sudo apt-get install -y build-essential g++ curl libssl-dev apache2-utils git libxml2-dev sshfs ca-certificates python
     
 # ------------------------------------------------------------------------------
 # Install Cloud9
