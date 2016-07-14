@@ -7,12 +7,12 @@ MAINTAINER Jérémy Young <darkterra01@gmail.com>
 
 # ------------------------------------------------------------------------------
 # Install base
-RUN sudo apt-get update
-RUN sudo apt-get install -y build-essential g++ curl libssl-dev apache2-utils git libxml2-dev sshfs ca-certificates python
+RUN apt-get update
+RUN apt-get install -y build-essential g++ curl libssl-dev apache2-utils git libxml2-dev sshfs ca-certificates python
     
 # ------------------------------------------------------------------------------
 # Install Cloud9
-RUN sudo git clone https://github.com/c9/core.git /cloud9
+RUN git clone https://github.com/c9/core.git /cloud9
 WORKDIR /cloud9
 RUN scripts/install-sdk.sh
 
@@ -44,4 +44,4 @@ EXPOSE 80
 # ------------------------------------------------------------------------------
 # Start supervisor, define default command.
 #CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
-CMD ["node", "/cloud9/server.js", "--collab", "--listen 0.0.0.0", "--port 80", "-w", "/workspace"]
+CMD ["node", "/cloud9/server.js --collab --listen 0.0.0.0 --port 80 -w /workspace"]
