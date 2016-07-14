@@ -44,4 +44,4 @@ EXPOSE 80
 # ------------------------------------------------------------------------------
 # Start supervisor, define default command.
 #CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
-CMD ["node", "/cloud9/server.js --collab --listen 0.0.0.0 --port 80 -w /workspace"]
+CMD ["node server.js --collab --listen 0.0.0.0 --port 80 -w /workspace"]
