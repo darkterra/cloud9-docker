@@ -2,7 +2,7 @@
 # Based on a work at https://github.com/docker/docker.
 # ------------------------------------------------------------------------------
 # Pull base image.
-FROM resin/rpi-raspbian:jessie-20160713
+#FROM resin/rpi-raspbian:jessie-20160713
 MAINTAINER Jérémy Young <darkterra01@gmail.com>
 
 # ------------------------------------------------------------------------------
