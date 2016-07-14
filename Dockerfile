@@ -3,6 +3,7 @@
 # ------------------------------------------------------------------------------
 # Pull base image.
 #FROM resin/rpi-raspbian:jessie-20160713
+FROM scratch
 MAINTAINER Jérémy Young <darkterra01@gmail.com>
 
 # ------------------------------------------------------------------------------
