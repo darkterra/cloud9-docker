@@ -21,10 +21,7 @@ RUN apt-get install -y postgresql-9.4
 
 # ------------------------------------------------------------------------------
 # Install Redis
-RUN wget http://download.redis.io/redis-stable.tar.gz
-RUN tar xvzf redis-stable.tar.gz
-WORKDIR redis-stable
-RUN make
+RUN wget http://download.redis.io/redis-stable.tar.gz && tar xvzf redis-stable.tar.gz && cd redis-stable && make
 
 # ------------------------------------------------------------------------------
 # Install Node.js
