@@ -4,7 +4,7 @@ Cloud9 v3 Dockerfile
 This repository contains Dockerfile of Cloud9 IDE for Docker's automated build published to the public Docker Hub Registry.
 
 # Base Docker Image
-[resin/rpi-raspbian:jessie-20160713](https://hub.docker.com/r/resin/rpi-raspbian/)
+[darkterra/cloud9-docker](https://hub.docker.com/r/darkterra/cloud9-docker/)
 
 # Installation
 
