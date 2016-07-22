@@ -2,7 +2,7 @@
 # Based on a work at https://github.com/docker/docker.
 # ------------------------------------------------------------------------------
 # Pull base image.
-FROM jeremy/supervisor-docker
+FROM darkterra/supervisor-docker
 MAINTAINER Jérémy Young <darkterra01@gmail.com>
 
 # ------------------------------------------------------------------------------
