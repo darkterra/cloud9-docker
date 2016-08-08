@@ -12,8 +12,6 @@ RUN apt-get install -y build-essential g++ curl libssl-dev apache2-utils git lib
 
 # ------------------------------------------------------------------------------
 # Install Postgre
-#RUN apt-get install postgresql-9.4
-
 RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
 RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
 RUN apt-get update
@@ -27,8 +25,9 @@ RUN wget http://download.redis.io/redis-stable.tar.gz && tar xvzf redis-stable.t
 # Install Node.js
 #RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
 #RUN apt-get install -y nodejs
-RUN nvm install 0.10.40
-RUN nvm alias default 0.10.40
+RUN sudo -u ubuntu -i bash -l -c " \
+    nvm install 0.10.40 && \
+    nvm alias default 0.10.40"
 
 # ------------------------------------------------------------------------------
 # Install Cloud9
