@@ -25,8 +25,10 @@ RUN wget http://download.redis.io/redis-stable.tar.gz && tar xvzf redis-stable.t
 
 # ------------------------------------------------------------------------------
 # Install Node.js
-RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
-RUN apt-get install -y nodejs
+#RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
+#RUN apt-get install -y nodejs
+RUN nvm install 0.10.40
+RUN nvm alias default 0.10.40
 
 # ------------------------------------------------------------------------------
 # Install Cloud9
@@ -42,8 +44,8 @@ ADD conf/cloud9.conf /etc/supervisor/conf.d/
 
 # ------------------------------------------------------------------------------
 # Add volumes
-RUN mkdir /workspace
-VOLUME /workspace
+#RUN mkdir /workspace
+#VOLUME /workspace
 
 # ------------------------------------------------------------------------------
 # Clean up APT when done.
@@ -51,7 +53,7 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # ------------------------------------------------------------------------------
 # Expose ports.
-EXPOSE 80 8080
+EXPOSE 80 8080 5433
 
 # ------------------------------------------------------------------------------
 # Start supervisor, define default command.
