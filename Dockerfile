@@ -73,10 +73,22 @@ RUN sudo -u ubuntu -i bash -l -c " \
     cd LibreOffice_4.1.6.2_Linux_x86-64_deb/DEBS && \
     sudo dpkg -i *.deb"
 
+# Création d'une Bdd minimale
+RUN sudo -u postgres createdb oscarcc
+
+# Création du user compass
+RUN sudo -u postgres createuser -P --superuser compass
+
+# Suppression du contenu par default de C9-Node
+RUN rm -rf /home/ubuntu/workspace/*
+
+# Copie du dossier des dumps
+ADD dumps /home/ubuntu/workspace/
+RUN chown -R ubuntu:ubuntu /home/ubuntu/workspace/dumps &&  chmod - R 720 /home/ubuntu/workspace/dumps
+
 # Ajout du fichier de config npm
 ADD conf/npmrc /home/ubuntu/.npmrc
-RUN chown ubuntu:ubuntu /home/ubuntu/.npmrc
-RUN chmod 600 /home/ubuntu/.npmrc
+RUN chown ubuntu:ubuntu /home/ubuntu/.npmrc && chmod 600 /home/ubuntu/.npmrc
 
 # Ligne à supprimer ?
 #    sudo apt-get remove --purge libreoffice* && \
