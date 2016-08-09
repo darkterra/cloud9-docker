@@ -73,7 +73,10 @@ RUN sudo -u ubuntu -i bash -l -c " \
     cd LibreOffice_4.1.6.2_Linux_x86-64_deb/DEBS && \
     sudo dpkg -i *.deb"
 
+# Ajout du fichier de config npm
 ADD conf/npmrc /home/ubuntu/.npmrc
+RUN chown ubuntu:ubuntu /home/ubuntu/.npmrc
+RUN chmod 600 /home/ubuntu/.npmrc
 
 # Ligne à supprimer ?
 #    sudo apt-get remove --purge libreoffice* && \
