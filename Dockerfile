@@ -75,30 +75,23 @@ RUN sudo -u ubuntu -i bash -l -c " \
 
 # Création d'une Bdd minimale
 RUN sudo -u postgres createdb oscarcc
-
-# Création du user compass
-RUN sudo -u postgres createuser -P --superuser compass
+# Voir comment créer un user automatiquement > && sudo -u postgres createuser -P --superuser --createdb --createrole compass
 
 # Suppression du contenu par default de C9-Node
 RUN rm -rf /home/ubuntu/workspace/*
 
 # Copie du dossier des dumps
-ADD dumps /home/ubuntu/workspace/
-RUN chown -R ubuntu:ubuntu /home/ubuntu/workspace/dumps &&  chmod - R 720 /home/ubuntu/workspace/dumps
+ADD dumps /home/ubuntu/workspace/dumps/
+#RUN chown -R ubuntu:ubuntu /home/ubuntu/workspace/dumps && chmod - R 720 /home/ubuntu/workspace/dumps
 
 # Ajout du fichier de config npm
 ADD conf/npmrc /home/ubuntu/.npmrc
-RUN chown ubuntu:ubuntu /home/ubuntu/.npmrc && chmod 600 /home/ubuntu/.npmrc
+#RUN chown ubuntu:ubuntu /home/ubuntu/.npmrc && chmod 600 /home/ubuntu/.npmrc
 
 # Ligne à supprimer ?
 #    sudo apt-get remove --purge libreoffice* && \
 #    sudo apt-get autoremove --purge && \
 #    sudo apt-get install ttf-mscorefonts-installer && \
-
-# Remplacé par la copie du fichier .npmrc (ci-dessus)
-#    sudo npm set registry http://xpars-tls01.compass-group.fr:4873/ && \
-#    sudo npm set strict-ssl false && \
-#    sudo npm set always-auth true
 
 # ------------------------------------------------------------------------------
 # Expose ports
