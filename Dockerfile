@@ -6,7 +6,7 @@ FROM darkterra/supervisor-docker
 MAINTAINER Jérémy Young <darkterra01@gmail.com>
 
 # ------------------------------------------------------------------------------
-# Install base
+# Install basics
 RUN apt-get update
 RUN apt-get install -y build-essential g++ curl libssl-dev apache2-utils git libxml2-dev sshfs
 
@@ -22,12 +22,9 @@ RUN apt-get install -y postgresql-9.4
 RUN wget http://download.redis.io/redis-stable.tar.gz && tar xvzf redis-stable.tar.gz && cd redis-stable && make
 
 # ------------------------------------------------------------------------------
-# Install Node.js
-#RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
-#RUN apt-get install -y nodejs
-RUN sudo -u ubuntu -i bash -l -c " \
-    nvm install 0.10.40 && \
-    nvm alias default 0.10.40"
+# Install Node.js (Uniquement pour lancer le serveur Cloud9)
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
+RUN apt-get install -y nodejs
 
 # ------------------------------------------------------------------------------
 # Install Cloud9
@@ -42,18 +39,55 @@ RUN sed -i -e 's_127.0.0.1_0.0.0.0_g' /cloud9/configs/standalone.js
 ADD conf/cloud9.conf /etc/supervisor/conf.d/
 
 # ------------------------------------------------------------------------------
-# Add volumes
-#RUN mkdir /workspace
-#VOLUME /workspace
-
-# ------------------------------------------------------------------------------
-# Clean up APT when done.
+# Clean up APT when done
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # ------------------------------------------------------------------------------
-# Expose ports.
+# Suppression de Postgres 9.3
+RUN sudo -u ubuntu -i bash -l -c " \
+    sudo apt-get purge postgresql-9.3"
+
+# ------------------------------------------------------------------------------
+# Ajout de la configuration de Postgres 9.4
+ADD conf/pg_hba.conf /etc/postgresql/9.4/main/
+ADD conf/postgresql.conf /etc/postgresql/9.4/main/
+
+# ------------------------------------------------------------------------------
+# Configurations Spécifique à Oscar (TODO: Déporter cette partie dans un script)
+
+# Version spécifique pour l'application Oscar
+RUN sudo -u ubuntu -i bash -l -c " \
+    nvm install 0.10.40 && \
+    nvm alias default 0.10.40"
+    
+    # TODO: Vérifier la commande forever colums add dir (ci dessous) si elle est correcte !
+RUN sudo -u ubuntu -i bash -l -c " \
+    sudo echo Defaults secure_path=\"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\" >> /etc/sudoers && \
+    npm install -g npm@2.7.5 && \
+    npm install -g forever@0.15.1 && \
+    forever columns add dir && \
+    sudo apt-get remove --purge libreoffice* && \
+    sudo apt-get autoremove --purge && \
+    sudo apt-get install libxinerama1 libfontconfig1 libcups2 && \
+    cd ~ && \
+    wget https://downloadarchive.documentfoundation.org/libreoffice/old/4.1.6.2/deb/x86_64/LibreOffice_4.1.6.2_Linux_x86-64_deb.tar.gz && \
+    tar -xvzf LibreOffice_4.1.6.2_Linux_x86-64_deb.tar.gz && \
+    cd LibreOffice_4.1.6.2_Linux_x86-64_deb/DEBS && \
+    sudo dpkg -i *.deb && \
+    sudo apt-get install ttf-mscorefonts-installer && \
+    npm set registry http://xpars-tls01.compass-group.fr:4873/ && \
+    npm set strict-ssl false && \
+    npm set always-auth true && \
+    npm adduser"
+
+# ------------------------------------------------------------------------------
+# Expose ports
 EXPOSE 80 8080 5433
 
 # ------------------------------------------------------------------------------
-# Start supervisor, define default command.
+# Start Postgres service
+CMD /etc/init.d/postgresql start
+
+# ------------------------------------------------------------------------------
+# Start supervisor, define default command
 CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
