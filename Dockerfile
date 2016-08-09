@@ -45,7 +45,7 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 # ------------------------------------------------------------------------------
 # Suppression de Postgres 9.3
 RUN sudo -u ubuntu -i bash -l -c " \
-    sudo apt-get purge postgresql-9.3"
+    sudo apt-get purge -y postgresql-9.3"
 
 # ------------------------------------------------------------------------------
 # Ajout de la configuration de Postgres 9.4
@@ -54,39 +54,40 @@ ADD conf/postgresql.conf /etc/postgresql/9.4/main/
 
 # ------------------------------------------------------------------------------
 # Configurations Spécifique à Oscar (TODO: Déporter cette partie dans un script)
+RUN echo Defaults secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" >> /etc/sudoers
 
 # Version spécifique pour l'application Oscar
 RUN sudo -u ubuntu -i bash -l -c " \
     nvm install 0.10.40 && \
     nvm alias default 0.10.40"
     
-    # TODO: Vérifier la commande forever colums add dir (ci dessous) si elle est correcte !
+# TODO: Vérifier la commande forever colums add dir (ci dessous) si elle est correcte !
 RUN sudo -u ubuntu -i bash -l -c " \
-    sudo echo Defaults secure_path=\"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\" >> /etc/sudoers && \
     npm install -g npm@2.7.5 && \
     npm install -g forever@0.15.1 && \
     forever columns add dir && \
-    sudo apt-get remove --purge libreoffice* && \
-    sudo apt-get autoremove --purge && \
     sudo apt-get install libxinerama1 libfontconfig1 libcups2 && \
     cd ~ && \
     wget https://downloadarchive.documentfoundation.org/libreoffice/old/4.1.6.2/deb/x86_64/LibreOffice_4.1.6.2_Linux_x86-64_deb.tar.gz && \
     tar -xvzf LibreOffice_4.1.6.2_Linux_x86-64_deb.tar.gz && \
     cd LibreOffice_4.1.6.2_Linux_x86-64_deb/DEBS && \
-    sudo dpkg -i *.deb && \
-    sudo apt-get install ttf-mscorefonts-installer && \
-    npm set registry http://xpars-tls01.compass-group.fr:4873/ && \
-    npm set strict-ssl false && \
-    npm set always-auth true && \
-    npm adduser"
+    sudo dpkg -i *.deb"
+
+ADD conf/npmrc /home/ubuntu/.npmrc
+
+# Ligne à supprimer ?
+#    sudo apt-get remove --purge libreoffice* && \
+#    sudo apt-get autoremove --purge && \
+#    sudo apt-get install ttf-mscorefonts-installer && \
+
+# Remplacé par la copie du fichier .npmrc (ci-dessus)
+#    sudo npm set registry http://xpars-tls01.compass-group.fr:4873/ && \
+#    sudo npm set strict-ssl false && \
+#    sudo npm set always-auth true
 
 # ------------------------------------------------------------------------------
 # Expose ports
 EXPOSE 80 8080 5433
-
-# ------------------------------------------------------------------------------
-# Start Postgres service
-CMD /etc/init.d/postgresql start
 
 # ------------------------------------------------------------------------------
 # Start supervisor, define default command

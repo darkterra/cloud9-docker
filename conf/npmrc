@@ -1,0 +1,7 @@
+_auth=b3NjYXJ1OjZwVjc1R3hX
+progress=false
+registry=http://xpars-tls01.compass-group.fr:4873/
+strict-ssl=false
+always-auth=true
+email=toto@titi.fr
+//xpars-tls01.compass-group.fr:4873/:_authToken="re/bd5eJ9u2x4bL3Nboteg=="
